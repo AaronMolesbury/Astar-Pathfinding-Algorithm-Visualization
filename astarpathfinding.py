@@ -66,13 +66,63 @@ class Node:
 	def make_path(self):
 		self.color = PURPLE
 
-	def draw(self,window):
-		pygame.draw.rect(window,self.color,(self.x,self.y,self.width,self.width))
+	def draw(self, window):
+		pygame.draw.rect(window, self.color, (self.x, self.y, self.width, self.width))
 
-	def update_neighbors(self,grid):
+	def update_neighbors(self, grid):
 		pass
 
 	def __lt__(self, other):
 		return False
+
+#HEURISTIC FUNCTION USES MANHATTAN DISTANCE
+def h(point1, point2):
+	x1,y1 = point1
+	x2,y2 = point2
+	return abs(x1 - x2) + abs(y1 - y2)
+
+def make_grid(rows, width):
+	grid = []
+	gap = width // rows
+	
+	for i in range(rows):
+		grid.append([])
+		for j in range(rows):
+			node = Node(i, j, gap, rows)
+			grid[i].append(node)
+	
+	return grid
+
+def draw_grid_lines(win, rows, width):
+	gap = width // rows
+	
+	for i in range(rows):
+		pygame.draw.line(win, GREY, (0, i * gap), (width, i * gap))
+	for j in range(rows):
+		pygame.draw.line(win, GREY, (j * gap, 0), (j * gap, width))
+
+def draw(win, grid, rows, width):
+	win.fill(WHITE)
+	
+	for row in grid:
+		for node in row:
+			node.draw(win)
+
+	draw_grid_lines(win, rows, width)
+	pygame.display.update()
+
+def get_mouse_position(pos, rows, width):
+	gap = width // rows
+	y,x = pos
+	
+	row = y // gap
+	col = x // gap
+
+	return row, col
+
+
+
+
+
 
 
